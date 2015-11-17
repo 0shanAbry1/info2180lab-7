@@ -40,7 +40,7 @@
                         lst.appendChild(def); console.log(def);
                                     
                         exmp = document.createElement("p");
-                        exmp.innerHTML = "I am ignorant of the meaning of "+wrd;
+                        exmp.innerHTML = "I am ignorant of the meaning of "+wrd.innerHTML;
                         lst.appendChild(exmp); console.log(exmp);
                                     
                         athr = document.createElement("p");
@@ -56,8 +56,8 @@
     <title>Ajax - Search Button</title>
     </head>
     <body>
-            <button id="lookup">Search</button>
             <input id="lookuptext" type="text">
+            <button id="lookup">Search</button>
             <div id="result"></div>
     </body>
 </html>
