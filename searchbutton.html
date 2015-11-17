@@ -3,27 +3,61 @@
     <head>
        <script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
        <script>
-           window.onload = function() {
-             document.getElementById("search").addEventListener(
-                             "click", function(){
-                // go out and get result from request.php
-                 new Ajax.Request("request.php?q=definition",
-                       {
-                          method: "get",
-                          onSuccess: doSomethingWithTheResult
-                         });
-                  
-           });
+           window.onload = function(){
+             document.getElementById("lookup").addEventListener("click", function(){
+                // Takes query; returns result from request.php
+                var lookuptext = document.getElementById("lookuptext").value;
+                new Ajax.Request("request.php?q="+lookuptext+'&all=true',
+                    {method: "get", onSuccess: resultResponse});
+            });};
 
-function doSomethingWithTheResult(data) {
-                          alert(data.responseText);
-                        }
-           }                        
-
-       </script>
-        <title>Ajax Demo of Seach Button</title>
+            function resultResponse(data){
+                //alert(data.responseText);
+                var str = document.createElement("ol"); 
+                var div_result = document.getElementById("result");
+                var wrd,def,exmp,athr,lst;
+                            
+                if(data.responseXML==null){
+                    div_result.innerHTML = data.responseText; //Server >> format: string
+                    console.log((data.responseText));
+                }// Default
+                else{
+                    var xml_data = data.responseXML;
+                    console.log(xml_data);
+                    var content = xml_data.getElementsByTagName('entries')[0].childNodes;
+                    console.log(content);
+                                
+                    for(var i=0; i<content.length; i++){
+                        lst = document.createElement("li"); // To hold the wrd,def,exmp,athr
+                                    
+                        wrd = document.createElement("p");
+                        wrd.innerHTML = content[i].getAttribute('name');
+                        //wrd.style.fontWeight="bold"; wrd.style.fontSize="26px";
+                        lst.appendChild(wrd); console.log(wrd);
+                                    
+                        def = document.createElement("p");
+                        def.innerHTML = content[i].firstChild.nodeValue;
+                        lst.appendChild(def); console.log(def);
+                                    
+                        exmp = document.createElement("p");
+                        exmp.innerHTML = "I am ignorant of the meaning of "+wrd;
+                        lst.appendChild(exmp); console.log(exmp);
+                                    
+                        athr = document.createElement("p");
+                        athr.innerHTML = "- Alicia";
+                        lst.appendChild(athr); console.log(athr);
+                                    
+                        str.appendChild(lst); // Adding list (lst) to order list (str)
+                    }//for
+                    div_result.appendChild(str); // Adding ordered list (str) to div with id "result"
+                }//else
+            }//function
+    </script>
+    <title>Ajax - Search Button</title>
     </head>
     <body>
-            <button id="search">Search</button>
+            <button id="lookup">Search</button>
+            <input id="lookuptext" type="text">
+            <div id="result"></div>
     </body>
 </html>
