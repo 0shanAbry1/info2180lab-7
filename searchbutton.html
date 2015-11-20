@@ -2,6 +2,7 @@
 <html>
     <head>
        <script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
+       <!--<link rel="stylesheet" href="exmpbox.css" type="text/css"/>-->
        <script>
            window.onload = function(){
              document.getElementById("lookup").addEventListener("click", function(){
@@ -15,37 +16,36 @@
                 //alert(data.responseText);
                 var str = document.createElement("ol"); 
                 var div_result = document.getElementById("result");
+                
                 var wrd,def,exmp,athr,lst;
-                            
                 if(data.responseXML==null){
-                    div_result.innerHTML = data.responseText; //Server >> format: string
-                    console.log((data.responseText));
+                    div_result.innerHTML = data.responseText; //Server >> format: string //console.log((data.responseText));
                 }// Default
                 else{
-                    var xml_data = data.responseXML;
-                    console.log(xml_data);
-                    var content = xml_data.getElementsByTagName('entries')[0].childNodes;
-                    console.log(content);
+                    var xml_data = data.responseXML; //Retrieve xml 
+                    var def_xml = xml_data.getElementsByTagName('definitions') //Retrieve an array of all definitions tags
+                    var exmp_xml = xml_data.getElementsByTagName('examples') //Retrieve an array of all examples tags
+                    var athr_xml = xml_data.getElementsByTagName('authors') //Retrieve an array of all authors tags
                                 
-                    for(var i=0; i<content.length; i++){
+                    for(var i=0; i<def_xml.length; i++){
                         lst = document.createElement("li"); // To hold the wrd,def,exmp,athr
-                                    
+                        
                         wrd = document.createElement("p");
-                        wrd.innerHTML = content[i].getAttribute('name');
-                        //wrd.style.fontWeight="bold"; wrd.style.fontSize="26px";
-                        lst.appendChild(wrd); console.log(wrd);
-                                    
+                        wrd.innerHTML = def_xml[i].getAttribute('name'); //wrd.style.fontWeight="bold"; wrd.style.fontSize="15px";
+                        lst.appendChild(wrd); //console.log(wrd.innerHTML);
+                        
                         def = document.createElement("p");
-                        def.innerHTML = content[i].firstChild.nodeValue;
-                        lst.appendChild(def); console.log(def);
+                        def.innerHTML = def_xml[i].innerHTML;
+                        lst.appendChild(def); //console.log(def.innerHTML);
                                     
                         exmp = document.createElement("p");
-                        exmp.innerHTML = "I am ignorant of the meaning of "+wrd.innerHTML;
-                        lst.appendChild(exmp); console.log(exmp);
+                        //exmp.addClassName("example");
+                        exmp.innerHTML = exmp_xml[i].innerHTML;
+                        lst.appendChild(exmp); //console.log(exmp);
                                     
                         athr = document.createElement("p");
-                        athr.innerHTML = "- Alicia";
-                        lst.appendChild(athr); console.log(athr);
+                        athr.innerHTML = athr_xml[i].innerHTML;
+                        lst.appendChild(athr); //console.log(athr);
                                     
                         str.appendChild(lst); // Adding list (lst) to order list (str)
                     }//for
