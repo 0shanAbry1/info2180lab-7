@@ -1,0 +1,7 @@
+.example {
+	background-color: rgb(238, 238, 221);
+	border: 1px dashed rgb(90, 83, 42);
+	color: rgb(90, 83, 42);
+	font-style: italic;
+	margin: 1em;
+}
